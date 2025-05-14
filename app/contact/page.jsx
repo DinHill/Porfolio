@@ -14,10 +14,10 @@ const Contact = () => {
 
     emailjs
       .sendForm(
-        "service_5dyrdyy", // Your EmailJS Service ID
-        "template_8a6nppf", // Your EmailJS Template ID
+        "service_5dyrdyy", 
+        "template_8a6nppf", 
         e.target,
-        "Mi4jfuwgYIkDyOCNX" // Your EmailJS User ID
+        "Mi4jfuwgYIkDyOCNX" 
       )
       .then(
         (result) => {
@@ -26,13 +26,13 @@ const Contact = () => {
             icon: "success",
             title: "Message Sent!",
             text: "Your message has been sent successfully.",
-            confirmButtonColor: "#5810ff", // Accent color
+            confirmButtonColor: "#5810ff", 
             customClass: {
-              popup: "rounded-lg", // Add rounded corners to the alert box
+              popup: "rounded-lg", 
             },
           }).then((result) => {
             if (result.isConfirmed) {
-              e.target.reset(); // Reset the form only when the user clicks the confirm button
+              e.target.reset(); 
             }
           });
         },
