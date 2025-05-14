@@ -9,7 +9,7 @@ import Image from "next/image";
 import avatarImg from "@/public/assets/avatar.png";
 import Socials from "@/components/Socials";
 import Pattern from "@/components/Pattern";
-
+import Link from "next/link"; 
 
 const Home = () => {
   return (
@@ -45,12 +45,14 @@ const Home = () => {
           I'm always excited to explore new tools, build cool projects, and grow through real-world experiences. 
           I'm currently looking for opportunities to learn, contribute, and be part of a passionate tech team.
         </p>
-        <button className="btn btn-lg btn-accent mb-16">  
-          <div className="flex items-center gap-3"> 
-            <span>Let's talk</span>
-            <MdArrowOutward className="text-xl" />
-          </div>
-        </button>
+        <Link href="/about" passHref> {/* Navigate to the About Me page */}
+          <button className="btn btn-lg btn-accent mb-16">  
+            <div className="flex items-center gap-3"> 
+              <span>Get to know me</span> {/* Updated button text */}
+              <MdArrowOutward className="text-xl" />
+            </div>
+          </button>
+        </Link>
 
         <div className="flex flex-col xl:flex-row xl:items-center gap-4 xl:gap-8 mb-12 xl:mb-0">
           <div className="flex items-center gap-4 text-lg"> 
