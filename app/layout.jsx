@@ -10,7 +10,7 @@ const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
 const script = Dancing_Script({ variable: "--font-script", subsets: ["latin"], weight: ["700"] });
 
 export const metadata = {
-  title: `${profile.shortName} — ${profile.tagline}`,
+  title: profile.tabTitle,
   description: profile.intro,
 };
 

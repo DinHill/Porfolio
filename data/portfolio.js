@@ -5,6 +5,7 @@ export const profile = {
   name: "Dinh Hieu Nguyen",
   shortName: "Dinh Hieu",
   initials: "DH",
+  tabTitle: "Din Hiu", // browser tab title
   roles: ["Game Programmer", "Gameplay Developer"],
   tagline: "Game Programmer",
   intro:
