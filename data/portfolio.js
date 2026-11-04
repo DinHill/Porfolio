@@ -49,6 +49,7 @@ export const projects = [
   {
     title: "99 Waves in Bermuda",
     kind: "commercial",
+    company: "RIVRS",
     engine: "Roblox",
     year: "2026",
     genre: "Survival",
@@ -88,6 +89,7 @@ export const projects = [
   {
     title: "Animal Petting",
     kind: "commercial",
+    company: "RIVRS",
     engine: "Roblox",
     year: "2026",
     genre: "Incremental",
@@ -122,6 +124,7 @@ export const projects = [
   {
     title: "Villains Card Collection",
     kind: "commercial",
+    company: "RIVRS",
     engine: "Roblox",
     year: "2026",
     genre: "Collection",
@@ -156,6 +159,7 @@ export const projects = [
   {
     title: "Dungeons Incremental 2",
     kind: "commercial",
+    company: "RIVRS",
     engine: "Roblox",
     year: "2025–2026",
     genre: "Incremental",
@@ -245,7 +249,7 @@ export const projects = [
 // projects:   titles from `projects` above that you worked on in that role (they link to the case study)
 export const experience = [
   {
-    company: "Roblox Game Studio",
+    company: "RIVRS",
     logo: "/assets/logos/rivrs.png",
     subtitle: "Live Roblox games",
     roles: [
@@ -276,7 +280,10 @@ export const experience = [
         start: "11/2025",
         end: "03/2026",
         summary: "Joined the team as an intern programming Roblox games, then moved into a full role.",
-        highlights: [],
+        highlights: [
+          { title: "Gameplay & UI", text: "Assisted in gameplay and UI implementation for Roblox games." },
+          { title: "Teamwork", text: "Collaborated with the development team to implement features and resolve issues within the existing game framework." },
+        ],
         tools: ["Roblox Studio", "Luau"],
         projects: ["Villains Card Collection", "Animal Petting"],
       },
