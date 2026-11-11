@@ -84,7 +84,7 @@ export const projects = [
     tech: ["Luau", "Roblox Studio", "Rojo", "Knit", "Roact", "Rodux"],
     image: "/assets/projects/99-waves-in-bermuda.png",
     links: { play: "https://www.roblox.com/games/81629228238850/99-WAVES-IN-BERMUDA" },
-    accent: "#38e2c8",
+    accent: "var(--mint)",
   },
   {
     title: "Animal Petting",
@@ -119,7 +119,7 @@ export const projects = [
     tech: ["Luau", "Roblox Studio", "Rojo"],
     image: "/assets/projects/animal-petting.png",
     links: { play: "https://www.roblox.com/games/84694535095284/Animal-Petting" },
-    accent: "#a6e85f",
+    accent: "var(--lime)",
   },
   {
     title: "Villains Card Collection",
@@ -154,7 +154,7 @@ export const projects = [
     tech: ["Luau", "Roblox Studio", "Rojo", "Knit"],
     image: "/assets/projects/villains-card-collection.png",
     links: { play: "https://www.roblox.com/games/139858102696806/Villains-Card-Collection" },
-    accent: "#ff6b9d",
+    accent: "var(--pink)",
   },
   {
     title: "Dungeons Incremental 2",
@@ -188,7 +188,7 @@ export const projects = [
     tech: ["Luau", "Roblox Studio"],
     image: "/assets/projects/dungeons-incremental-2.png",
     links: { play: "https://www.roblox.com/games/78148006177939/Dungeons-Incremental-2" },
-    accent: "#5ec8ff",
+    accent: "var(--sky)",
   },
   {
     title: "Undisclosed Game Project",
@@ -214,7 +214,7 @@ export const projects = [
       },
     ],
     tech: ["Unreal Engine 5", "C++", "Python"],
-    accent: "#c3cadb",
+    accent: "var(--ink-2)",
   },
   // {
   //   title: "Game name",
@@ -239,7 +239,7 @@ export const projects = [
   //     video: "https://www.youtube.com/watch?v=...",
   //     github: "",
   //   },
-  //   accent: "#8b7bff",
+  //   accent: "var(--violet)",   // a theme colour token (var(--mint), var(--sky)...) so it adapts to light/dark
   // },
 ];
 
@@ -335,25 +335,25 @@ export const skillGroups = [
   {
     name: "Engines",
     summary: "Where I build, test and ship games.",
-    color: "#ffb457",
+    color: "var(--amber)",
     items: ["Roblox Studio", "Unreal Engine 5"],
   },
   {
     name: "Languages",
     summary: "Luau day to day, plus C++ and Python from Unreal Engine work.",
-    color: "#8b7bff",
+    color: "var(--violet)",
     items: ["Luau", "C++", "Python"],
   },
   {
     name: "Roblox frameworks",
     summary: "For structuring game services and building reactive UI.",
-    color: "#38e2c8",
+    color: "var(--mint)",
     items: ["Knit", "Roact", "Rodux"],
   },
   {
     name: "Workflow & tools",
     summary: "How I sync, version, review and ship code with a team.",
-    color: "#5ec8ff",
+    color: "var(--sky)",
     items: ["Rojo", "Wally", "Git", "Claude"],
   },
 ];

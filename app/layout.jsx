@@ -1,7 +1,6 @@
 import { Inter, Sora, JetBrains_Mono, Dancing_Script } from "next/font/google";
 import "./globals.css";
-import Nav from "@/components/Nav";
-import Effects from "@/components/Effects";
+import { themeScript } from "@/lib/theme";
 import { profile } from "@/data/portfolio";
 
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
@@ -15,17 +14,23 @@ export const metadata = {
 };
 
 export const viewport = {
-  themeColor: "#07080d",
+  colorScheme: "dark light",
+  themeColor: [
+    { media: "(prefers-color-scheme: light)", color: "#f6f6fa" },
+    { media: "(prefers-color-scheme: dark)", color: "#07080d" },
+  ],
 };
 
+// Shared by the portfolio (app/(site)) and the private dashboard (app/hq).
+// data-theme is set by themeScript before paint, hence suppressHydrationWarning on <html>.
 export default function RootLayout({ children }) {
   return (
-    <html lang="en">
+    <html lang="en" suppressHydrationWarning>
+      <head>
+        <script dangerouslySetInnerHTML={{ __html: themeScript }} />
+      </head>
       <body className={`${inter.variable} ${sora.variable} ${mono.variable} ${script.variable} antialiased`}>
-        <a className="skip-link" href="#main">Skip to content</a>
-        <Effects />
-        <Nav />
-        <main id="main">{children}</main>
+        {children}
       </body>
     </html>
   );

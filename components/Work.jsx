@@ -6,6 +6,7 @@ import { HiOutlineCube, HiOutlineLockClosed } from "react-icons/hi";
 import { projectKinds, projects } from "@/data/portfolio";
 import { engineIcon } from "@/lib/engineIcons";
 import { projectAnchor } from "@/lib/slug";
+import { trackProject } from "@/lib/analytics/client";
 import SectionHead from "./SectionHead";
 import ProjectDialog from "./ProjectDialog";
 
@@ -46,6 +47,11 @@ const Work = () => {
   const [kind, setKind] = useState(ALL);
   const [engine, setEngine] = useState(ALL);
   const [openIndex, setOpenIndex] = useState(null);
+
+  // Analytics: count each case study once per visit, however it was opened (card, link, prev/next)
+  useEffect(() => {
+    if (openIndex !== null) trackProject(projects[openIndex].title);
+  }, [openIndex]);
 
   const kindOptions = useMemo(() => countBy("kind", (v) => projectKinds[v] ?? v), []);
   const engineOptions = useMemo(() => countBy("engine"), []);

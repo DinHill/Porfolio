@@ -5,6 +5,7 @@ import emailjs from "emailjs-com";
 import { HiOutlineArrowLongRight } from "react-icons/hi2";
 import { MdArrowOutward } from "react-icons/md";
 import { profile, socials } from "@/data/portfolio";
+import { trackAction } from "@/lib/analytics/client";
 
 const Contact = () => {
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
@@ -29,6 +30,7 @@ const Contact = () => {
       .then(
         () => {
           setStatus("sent");
+          trackAction("message");
           form.reset();
         },
         (error) => {
@@ -59,7 +61,7 @@ const Contact = () => {
                   <small>Email</small>
                   <span className="contact__email">
                     <a href={`mailto:${profile.email}`}>{profile.email}</a>
-                    <button type="button" className="contact__copy" onClick={copyEmail}>
+                    <button type="button" className="contact__copy" onClick={copyEmail} data-track="email">
                       {copied ? "Copied ✓" : "Copy"}
                     </button>
                   </span>

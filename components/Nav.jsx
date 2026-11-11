@@ -4,6 +4,7 @@ import { useEffect, useState } from "react";
 import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
 import { MdFileDownload } from "react-icons/md";
 import { navLinks, profile } from "@/data/portfolio";
+import ThemeToggle from "./ThemeToggle";
 
 const Nav = () => {
   const [open, setOpen] = useState(false);
@@ -63,6 +64,7 @@ const Nav = () => {
         </nav>
 
         <div className="nav__actions">
+          <ThemeToggle />
           <a className="btn btn--ghost btn--sm nav__cv" href={profile.cv} download={profile.cvFileName}>
             <MdFileDownload aria-hidden="true" />
             <span>CV</span>
