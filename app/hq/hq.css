@@ -21,8 +21,13 @@
   border-radius: 999px;
   border: 1px solid var(--line);
   background: var(--panel);
+  max-width: 100%;
+  overflow-x: auto;
+  scrollbar-width: none;
 }
 .hq-range a {
+  flex: none;
+  white-space: nowrap;
   padding: 6px 14px;
   border-radius: 999px;
   color: var(--muted);
@@ -70,7 +75,14 @@
   background: var(--panel);
   min-width: 0;
 }
-.hq-card__head { margin-bottom: 18px; }
+.hq-card__head {
+  display: flex;
+  flex-wrap: wrap;
+  align-items: flex-start;
+  justify-content: space-between;
+  gap: 12px 20px;
+  margin-bottom: 18px;
+}
 .hq-card__head h2 { font-size: 17px; font-weight: 600; }
 .hq-card__head p { margin: 4px 0 0; color: var(--muted); font-size: 13px; }
 .hq-grid { display: grid; grid-template-columns: repeat(2, minmax(0, 1fr)); gap: 20px; }
@@ -202,21 +214,56 @@
 .hq-rank__bar { grid-column: 1 / -1; height: 6px; }
 .hq-rank__bar i { display: block; height: 100%; min-width: 4px; border-radius: 0 4px 4px 0; background: var(--violet); }
 
-/* ---------- Recent visits ---------- */
-.hq-sessions { display: grid; }
-.hq-sessions li + li { border-top: 1px solid var(--line-soft); }
-.hq-sessions > li { display: grid; gap: 8px; padding: 14px 0; }
-.hq-sessions__meta { display: flex; flex-wrap: wrap; align-items: center; gap: 4px 16px; color: var(--muted); font-size: 13px; }
-.hq-sessions__meta time { color: var(--ink); font-family: var(--f-mono); font-size: 12.5px; }
-.hq-badge { padding: 1px 8px; border-radius: 6px; background: var(--panel-2); font-size: 12px; }
+/* ---------- Visitor table ---------- */
+.hq-vt {
+  overflow-x: auto;
+  margin: 0 -24px;
+  padding: 0 24px;
+  overscroll-behavior-x: contain;
+}
+.hq-vt:focus-visible { outline: 2px solid var(--violet); outline-offset: -2px; }
+.hq-vt table { width: 100%; min-width: 1040px; border-collapse: collapse; font-size: 13.5px; }
+.hq-vt th,
+.hq-vt td { padding: 12px 14px 12px 0; border-bottom: 1px solid var(--line-soft); text-align: left; vertical-align: top; }
+.hq-vt thead th {
+  padding-top: 0;
+  border-bottom-color: var(--line);
+  color: var(--muted);
+  font-size: 12.5px;
+  font-weight: 500;
+  white-space: nowrap;
+}
+.hq-vt tbody tr:last-child > * { border-bottom: 0; }
+.hq-vt tbody tr:hover > * { background: color-mix(in srgb, var(--panel-2) 60%, transparent); }
+.hq-vt tbody th { font-weight: 400; white-space: nowrap; }
+.hq-vt__when { display: grid; justify-items: start; gap: 6px; }
+.hq-vt time { color: var(--ink); font-family: var(--f-mono); font-size: 12.5px; }
+.hq-vt__main { display: block; color: var(--ink); white-space: nowrap; }
+.hq-vt__sub { display: block; margin-top: 2px; color: var(--muted); font-size: 12.5px; white-space: nowrap; }
+.hq-vt__path { color: var(--ink-2); }
+.hq-vt__num { color: var(--ink-2); font-variant-numeric: tabular-nums; white-space: nowrap; }
+.hq-none { color: var(--muted-2); }
+.hq-chips { display: flex; flex-wrap: wrap; gap: 6px; }
+
+.hq-pager {
+  display: flex;
+  align-items: center;
+  justify-content: space-between;
+  gap: 12px;
+  margin-top: 16px;
+  color: var(--muted);
+  font-size: 13px;
+}
+
+.hq-badge { padding: 1px 8px; border-radius: 6px; background: var(--panel-2); color: var(--muted); font-size: 12px; }
 .hq-badge.is-back { background: color-mix(in srgb, var(--mint) 14%, transparent); color: var(--ink); }
-.hq-journey { display: flex; flex-wrap: wrap; gap: 6px; }
 .hq-step {
   padding: 3px 10px;
   border-radius: 8px;
   border: 1px solid var(--line);
   color: var(--muted);
   font-size: 12.5px;
+  white-space: nowrap;
 }
 .hq-step--project { border-color: color-mix(in srgb, var(--violet) 40%, transparent); color: var(--ink); }
 .hq-step--reach { border-color: color-mix(in srgb, var(--mint) 55%, transparent); background: color-mix(in srgb, var(--mint) 12%, transparent); color: var(--ink); font-weight: 600; }
@@ -234,5 +281,16 @@
   .hq-funnel__drop,
   .hq-funnel__note { padding-left: 0; }
   .hq-card { padding: 18px 16px; }
+  .hq-vt { margin: 0 -16px; padding: 0; }
+  .hq-vt tr > :last-child { padding-right: 16px; }
+  /* Keep "When" pinned while the rest of the row scrolls sideways (solid: the card colour over the page) */
+  .hq-vt tr > :first-child {
+    position: sticky;
+    left: 0;
+    z-index: 1;
+    padding-left: 16px;
+    background: linear-gradient(var(--panel), var(--panel)), var(--bg);
+    box-shadow: 1px 0 0 var(--line-soft);
+  }
   .hq-kpi--hero b { font-size: 44px; }
 }

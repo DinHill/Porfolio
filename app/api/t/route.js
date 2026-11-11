@@ -21,8 +21,15 @@ export async function POST(request) {
     const event = parseEvent(JSON.parse(body));
     if (!event) return done();
 
+    // Rough location from the host's headers (Vercel / Cloudflare). The IP itself is never stored.
     const country = request.headers.get("x-vercel-ip-country") ?? request.headers.get("cf-ipcountry") ?? "";
-    await recordEvent(event, { country });
+    let city = request.headers.get("x-vercel-ip-city") ?? "";
+    try {
+      city = decodeURIComponent(city);
+    } catch {
+      city = "";
+    }
+    await recordEvent(event, { country, city, ua });
   } catch (error) {
     console.error("[analytics] event not recorded:", error.message);
   }

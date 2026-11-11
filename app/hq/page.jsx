@@ -1,41 +1,20 @@
 // Private visitor analytics. Anyone without the owner cookie gets the site's normal 404,
 // so the page looks like it doesn't exist. The way in is in components/SecretDoor.jsx.
 import { notFound } from "next/navigation";
-import ThemeToggle from "@/components/ThemeToggle";
 import { isOwner } from "@/lib/analytics/auth";
-import { loadReport, TIME_ZONE } from "@/lib/analytics/data";
-import { ACTION_LABELS, CONTACT_ACTIONS } from "@/lib/analytics/shared";
-import { storeKind } from "@/lib/analytics/store";
-import SignOut from "./SignOut";
+import { loadReport, loadVisitors } from "@/lib/analytics/data";
+import { ACTION_LABELS } from "@/lib/analytics/shared";
+import { capital, countryName, dateLabel, flag, num, pct } from "./format";
+import HqHeader, { rangeFrom } from "./HqHeader";
+import { Card, StoreNotice } from "./parts";
+import VisitorTable from "./VisitorTable";
 import "./hq.css";
-
-const RANGES = [7, 30, 90];
 
 // Nothing in the metadata either, unless it's you
 export async function generateMetadata() {
   if (!(await isOwner())) return {};
   return { title: "HQ · Visitor analytics", robots: { index: false, follow: false } };
 }
-
-// ---------- formatting ----------
-
-const num = (n) => n.toLocaleString("en-US");
-const pct = (part, whole) => (whole > 0 ? `${Math.round((part / whole) * 100)}%` : "–");
-const regionNames = new Intl.DisplayNames(["en"], { type: "region" });
-const flag = (code) =>
-  /^[A-Z]{2}$/.test(code) ? String.fromCodePoint(...[...code].map((c) => 0x1f1a5 + c.charCodeAt(0))) : "🌐";
-const countryName = (code) => {
-  if (!/^[A-Z]{2}$/.test(code)) return "Unknown";
-  try {
-    return regionNames.of(code) ?? code;
-  } catch {
-    return code;
-  }
-};
-const dateLabel = (day) =>
-  new Date(`${day}T12:00:00Z`).toLocaleDateString("en-GB", { day: "numeric", month: "short", timeZone: "UTC" });
-const timeLabel = (ms) =>
-  new Date(ms).toLocaleString("en-GB", { day: "numeric", month: "short", hour: "2-digit", minute: "2-digit", timeZone: TIME_ZONE });
 
 // A clean tick step (1, 2, 5 × 10ⁿ) so the axis reads 0 / step / 2·step
 const niceStep = (max) => {
@@ -44,26 +23,7 @@ const niceStep = (max) => {
   return [1, 2, 5, 10].map((m) => m * pow).find((s) => s >= raw);
 };
 
-const stepLabel = (step) => {
-  const [kind, value] = step.e.split(/:(.*)/);
-  if (kind === "visit") return { text: "Landed" };
-  if (kind === "section") return { text: value[0].toUpperCase() + value.slice(1), tone: "section" };
-  if (kind === "project") return { text: value, tone: "project" };
-  if (kind === "action") return { text: ACTION_LABELS[value] ?? value, tone: CONTACT_ACTIONS.includes(value) ? "reach" : "action" };
-  return { text: step.e };
-};
-
 // ---------- pieces ----------
-
-const Card = ({ title, sub, children, className = "" }) => (
-  <section className={`hq-card ${className}`}>
-    <header className="hq-card__head">
-      <h2>{title}</h2>
-      {sub && <p>{sub}</p>}
-    </header>
-    {children}
-  </section>
-);
 
 // Ranked list with a thin share bar per row; long tails fold into "Other"
 const Ranked = ({ rows, label = (name) => name, empty = "Nothing yet.", limit = 8 }) => {
@@ -165,44 +125,18 @@ const DailyChart = ({ daily }) => {
   );
 };
 
-const Sessions = ({ sessions }) => {
-  if (sessions.length === 0) return <p className="hq-empty">No visits recorded yet.</p>;
-  return (
-    <ul className="hq-sessions">
-      {sessions.map((s) => (
-        <li key={s.sid}>
-          <div className="hq-sessions__meta">
-            <time>{timeLabel(s.t)}</time>
-            <span>{flag(s.country)} {countryName(s.country)}</span>
-            <span>{s.ref === "direct" ? "Direct" : s.ref}{s.src ? ` · ?ref=${s.src}` : ""}</span>
-            <span>{s.device}</span>
-            <span className={`hq-badge ${s.returning === "1" ? "is-back" : ""}`}>{s.returning === "1" ? "Returning" : "New"}</span>
-          </div>
-          <ol className="hq-journey">
-            {s.steps.filter((step) => step.e !== "visit").map((step, i) => {
-              const { text, tone } = stepLabel(step);
-              return <li key={i} className={`hq-step hq-step--${tone}`}>{text}</li>;
-            })}
-            {s.steps.length <= 1 && <li className="hq-step">Bounced from the hero</li>}
-          </ol>
-        </li>
-      ))}
-    </ul>
-  );
-};
-
 // ---------- page ----------
 
 export default async function HQ({ searchParams }) {
   if (!(await isOwner())) notFound();
 
-  const { d } = await searchParams;
-  const range = RANGES.includes(Number(d)) ? Number(d) : 30;
+  const range = rangeFrom((await searchParams).d);
 
   let report = null;
+  let latest = null;
   let error = null;
   try {
-    report = await loadReport(range);
+    [report, latest] = await Promise.all([loadReport(range), loadVisitors({ range, perPage: 10 })]);
   } catch (err) {
     error = err.message;
   }
@@ -211,34 +145,16 @@ export default async function HQ({ searchParams }) {
 
   return (
     <div className="hq">
-      <header className="wrap hq-top">
-        <div>
-          <span className="eyebrow"><i /><b>HQ</b> Private · only you can see this</span>
-          <h1>Visitor analytics</h1>
-          <p className="hq-top__sub">Last {range} days · times in Da Nang (ICT) · your own visits aren&apos;t counted</p>
-        </div>
-        <div className="hq-top__actions">
-          <nav className="hq-range" aria-label="Date range">
-            {RANGES.map((r) => (
-              <a key={r} href={`/hq?d=${r}`} className={r === range ? "is-active" : ""} aria-current={r === range ? "page" : undefined}>
-                {r}d
-              </a>
-            ))}
-          </nav>
-          <ThemeToggle />
-          <a className="btn btn--ghost btn--sm" href="/">Site</a>
-          <SignOut />
-        </div>
-      </header>
+      <HqHeader
+        title="Visitor analytics"
+        sub={`Last ${range} days · times in Da Nang (ICT) · your own visits aren't counted`}
+        current="/hq"
+        range={range}
+        hrefFor={(r) => `/hq?d=${r}`}
+      />
 
       <div className="wrap hq-body">
-        {storeKind !== "redis" && (
-          <p className="hq-notice">
-            {storeKind === "file"
-              ? "Dev mode: events are saved to .analytics.json in the project folder."
-              : "No database connected, so visits are only kept in memory and vanish on redeploy. Connect Upstash Redis (see README)."}
-          </p>
-        )}
+        <StoreNotice />
         {error && <p className="hq-notice hq-notice--error">Couldn&apos;t load analytics: {error}</p>}
 
         {report && (
@@ -266,6 +182,18 @@ export default async function HQ({ searchParams }) {
               </div>
             </section>
 
+            <Card
+              title="Latest visitors"
+              sub={`The newest ${Math.min(10, latest.total)} of ${num(latest.total)} in the last ${range} days`}
+              action={
+                latest.total > 0 && (
+                  <a className="btn btn--ghost btn--sm" href={`/hq/visitors?d=${range}`}>See all visitors →</a>
+                )
+              }
+            >
+              <VisitorTable visitors={latest.visitors} />
+            </Card>
+
             <Card title="Funnel" sub="Each step only counts visits that also did every step above it.">
               <Funnel steps={report.funnel} />
             </Card>
@@ -288,22 +216,18 @@ export default async function HQ({ searchParams }) {
                 <Ranked rows={report.actions} label={(name) => ACTION_LABELS[name] ?? name} />
               </Card>
               <Card title="Sections reached" sub="Scrolled to the middle of the screen">
-                <Ranked rows={report.sections} label={(name) => name[0].toUpperCase() + name.slice(1)} />
+                <Ranked rows={report.sections} label={capital} />
               </Card>
               <Card title="Countries">
                 <Ranked rows={report.countries} label={(code) => `${flag(code)} ${countryName(code)}`} />
               </Card>
               <Card title="Devices" sub="By screen width">
-                <Ranked rows={report.devices} label={(name) => name[0].toUpperCase() + name.slice(1)} />
+                <Ranked rows={report.devices} label={capital} />
               </Card>
               <Card title="New vs returning">
                 <Ranked rows={report.returning} label={(name) => (name === "new" ? "First visit" : "Been here before")} />
               </Card>
             </div>
-
-            <Card title="Recent visits" sub="The last 30 sessions and what each one did" className="hq-card--wide">
-              <Sessions sessions={report.sessions} />
-            </Card>
           </>
         )}
       </div>
