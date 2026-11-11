@@ -12,7 +12,10 @@ const Footer = () => {
             </a>
           ))}
         </nav>
-        <a href="#top">Back to top ↑</a>
+        <span className="footer__end">
+          <a href="/privacy">Privacy</a>
+          <a href="#top">Back to top ↑</a>
+        </span>
       </div>
     </footer>
   );

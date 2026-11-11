@@ -21,7 +21,9 @@ export default function VisitorTable({ visitors, empty = "No visits recorded yet
           <tr>
             <th scope="col">When</th>
             <th scope="col">Came from</th>
-            <th scope="col">Location</th>
+            <th scope="col" title="Estimated from the visitor's internet provider. Country is reliable; the city is often the provider's hub (in Vietnam usually Ho Chi Minh City or Hanoi), and a VPN shows the VPN's location.">
+              Location <span className="hq-none">≈</span>
+            </th>
             <th scope="col">Device</th>
             <th scope="col">Scrolled to</th>
             <th scope="col">Projects opened</th>

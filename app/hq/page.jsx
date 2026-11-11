@@ -218,10 +218,10 @@ export default async function HQ({ searchParams }) {
               <Card title="Sections reached" sub="Scrolled to the middle of the screen">
                 <Ranked rows={report.sections} label={capital} />
               </Card>
-              <Card title="Countries">
+              <Card title="Countries" sub="Estimated from the network, so cities can be off (see the Visitors page)">
                 <Ranked rows={report.countries} label={(code) => `${flag(code)} ${countryName(code)}`} />
               </Card>
-              <Card title="Devices" sub="By screen width">
+              <Card title="Devices" sub="From the browser's own device info">
                 <Ranked rows={report.devices} label={capital} />
               </Card>
               <Card title="New vs returning">
