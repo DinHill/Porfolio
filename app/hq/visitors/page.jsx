@@ -6,6 +6,7 @@ import { num } from "../format";
 import HqHeader, { rangeFrom } from "../HqHeader";
 import { Card, StoreNotice } from "../parts";
 import VisitorTable from "../VisitorTable";
+import { PxIcon } from "@/components/Pixel";
 import "../hq.css";
 
 const PER_PAGE = 50;
@@ -80,9 +81,9 @@ export default async function Visitors({ searchParams }) {
 
             {result.pages > 1 && (
               <nav className="hq-pager" aria-label="Pages">
-                {result.page > 1 ? <a className="btn btn--ghost btn--sm" href={href({ p: result.page - 1 })}>← Newer</a> : <span />}
+                {result.page > 1 ? <a className="btn btn--ghost btn--sm" href={href({ p: result.page - 1 })}><PxIcon name="arrowLeft" /> Newer</a> : <span />}
                 <span>Page {result.page} of {result.pages}</span>
-                {result.page < result.pages ? <a className="btn btn--ghost btn--sm" href={href({ p: result.page + 1 })}>Older →</a> : <span />}
+                {result.page < result.pages ? <a className="btn btn--ghost btn--sm" href={href({ p: result.page + 1 })}>Older <PxIcon name="arrowRight" /></a> : <span />}
               </nav>
             )}
           </Card>

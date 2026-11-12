@@ -8,6 +8,7 @@ import { capital, countryName, dateLabel, flag, num, pct } from "./format";
 import HqHeader, { rangeFrom } from "./HqHeader";
 import { Card, StoreNotice } from "./parts";
 import VisitorTable from "./VisitorTable";
+import { PxIcon } from "@/components/Pixel";
 import "./hq.css";
 
 // Nothing in the metadata either, unless it's you
@@ -25,7 +26,7 @@ const niceStep = (max) => {
 
 // ---------- pieces ----------
 
-// Ranked list with a thin share bar per row; long tails fold into "Other"
+// Ranked list with a rank badge and a segmented share bar per row; long tails fold into "Other"
 const Ranked = ({ rows, label = (name) => name, empty = "Nothing yet.", limit = 8 }) => {
   if (rows.length === 0 || rows.every((row) => row.value === 0)) return <p className="hq-empty">{empty}</p>;
   const shown = rows.slice(0, limit);
@@ -35,9 +36,12 @@ const Ranked = ({ rows, label = (name) => name, empty = "Nothing yet.", limit = 
   const max = Math.max(...shown.map((row) => row.value));
   return (
     <ul className="hq-rank">
-      {shown.map((row) => (
+      {shown.map((row, i) => (
         <li key={row.name}>
-          <span className="hq-rank__name">{row.name === "__other" ? "Other" : label(row.name)}</span>
+          <span className="hq-rank__name">
+            <b className="hq-rank__pos" aria-hidden="true">{row.name === "__other" ? "…" : i + 1}</b>
+            <span>{row.name === "__other" ? "Other" : label(row.name)}</span>
+          </span>
           <span className="hq-rank__value">
             {num(row.value)} <small>{pct(row.value, total)}</small>
           </span>
@@ -143,6 +147,13 @@ export default async function HQ({ searchParams }) {
 
   const step = (id) => report?.funnel.find((s) => s.id === id)?.anyOrder ?? 0;
 
+  // Percentage tiles: share of visits that did the step, with an XP-style meter
+  const tiles = [
+    { id: "work", label: "Saw the Work section", icon: "star" },
+    { id: "project", label: "Opened a project", icon: "play" },
+    { id: "reach", label: "Reached out", icon: "mail", note: "message, email, CV, LinkedIn or phone" },
+  ];
+
   return (
     <div className="hq">
       <HqHeader
@@ -161,25 +172,20 @@ export default async function HQ({ searchParams }) {
           <>
             <section className="hq-kpis" aria-label="Summary">
               <div className="hq-kpi hq-kpi--hero">
-                <span>Visits</span>
+                <span><PxIcon name="gamepad" /> Visits</span>
                 <b>{num(report.visits)}</b>
                 <small>{num(report.views)} page views</small>
               </div>
-              <div className="hq-kpi">
-                <span>Saw the Work section</span>
-                <b>{pct(step("work"), report.visits)}</b>
-                <small>{num(step("work"))} visits</small>
-              </div>
-              <div className="hq-kpi">
-                <span>Opened a project</span>
-                <b>{pct(step("project"), report.visits)}</b>
-                <small>{num(step("project"))} visits</small>
-              </div>
-              <div className="hq-kpi">
-                <span>Reached out</span>
-                <b>{pct(step("reach"), report.visits)}</b>
-                <small>{num(step("reach"))} visits · message, email, CV, LinkedIn or phone</small>
-              </div>
+              {tiles.map((tile) => (
+                <div className="hq-kpi" key={tile.id}>
+                  <span><PxIcon name={tile.icon} /> {tile.label}</span>
+                  <b>{pct(step(tile.id), report.visits)}</b>
+                  <span className="hq-kpi__meter" aria-hidden="true">
+                    <i style={{ "--p": report.visits ? step(tile.id) / report.visits : 0 }} />
+                  </span>
+                  <small>{num(step(tile.id))} visits{tile.note ? ` · ${tile.note}` : ""}</small>
+                </div>
+              ))}
             </section>
 
             <Card
@@ -187,7 +193,7 @@ export default async function HQ({ searchParams }) {
               sub={`The newest ${Math.min(10, latest.total)} of ${num(latest.total)} in the last ${range} days`}
               action={
                 latest.total > 0 && (
-                  <a className="btn btn--ghost btn--sm" href={`/hq/visitors?d=${range}`}>See all visitors →</a>
+                  <a className="btn btn--ghost btn--sm" href={`/hq/visitors?d=${range}`}>See all visitors <PxIcon name="arrowRight" /></a>
                 )
               }
             >
