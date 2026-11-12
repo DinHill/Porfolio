@@ -2,11 +2,10 @@
 
 import { useEffect, useRef } from "react";
 import Image from "next/image";
-import { MdArrowOutward } from "react-icons/md";
 import { FaGithub, FaYoutube } from "react-icons/fa";
-import { HiX } from "react-icons/hi";
 import { projectKinds } from "@/data/portfolio";
 import ConfidentialNote from "./ConfidentialNote";
+import { PxIcon } from "./Pixel";
 
 // "https://www.youtube.com/watch?v=ID" or "https://youtu.be/ID" -> embeddable URL
 const youtubeEmbed = (url) => {
@@ -48,7 +47,7 @@ const ProjectDialog = ({ project, onClose, onPrev, onNext }) => {
               <p className="pdialog__meta">{meta.join(" · ")}</p>
             </div>
             <button className="pdialog__close" onClick={onClose} aria-label="Close">
-              <HiX />
+              <PxIcon name="close" />
             </button>
           </header>
 
@@ -102,8 +101,8 @@ const ProjectDialog = ({ project, onClose, onPrev, onNext }) => {
             <div className="pdialog__links">
               {links.play && (
                 <a className="btn btn--primary btn--sm" href={links.play} target="_blank" rel="noopener noreferrer">
+                  <PxIcon name="play" />
                   <span>Play</span>
-                  <MdArrowOutward aria-hidden="true" />
                 </a>
               )}
               {links.video && !embed && (
@@ -123,8 +122,8 @@ const ProjectDialog = ({ project, onClose, onPrev, onNext }) => {
 
           {(onPrev || onNext) && (
             <footer className="pdialog__nav">
-              <button className="btn btn--ghost btn--sm" onClick={onPrev} disabled={!onPrev}>← Previous</button>
-              <button className="btn btn--ghost btn--sm" onClick={onNext} disabled={!onNext}>Next →</button>
+              <button className="btn btn--ghost btn--sm" onClick={onPrev} disabled={!onPrev}><PxIcon name="arrowLeft" /> Previous</button>
+              <button className="btn btn--ghost btn--sm" onClick={onNext} disabled={!onNext}>Next <PxIcon name="arrowRight" /></button>
             </footer>
           )}
         </div>

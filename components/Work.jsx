@@ -2,20 +2,20 @@
 
 import { useCallback, useEffect, useMemo, useState } from "react";
 import Image from "next/image";
-import { HiOutlineCube, HiOutlineLockClosed } from "react-icons/hi";
 import { projectKinds, projects } from "@/data/portfolio";
 import { engineIcon } from "@/lib/engineIcons";
 import { projectAnchor } from "@/lib/slug";
 import { trackProject } from "@/lib/analytics/client";
 import SectionHead from "./SectionHead";
 import ProjectDialog from "./ProjectDialog";
+import { PxIcon } from "./Pixel";
 
 const ALL = "all";
 
-// Cards without a screenshot show the engine's mark, or a cube if the engine has none
+// Cards without a screenshot show the engine's mark, or a pixel gamepad if the engine has none
 const placeholderIcon = (project) => {
-  const Icon = engineIcon(project.engine) ?? HiOutlineCube;
-  return <Icon />;
+  const Icon = engineIcon(project.engine);
+  return Icon ? <Icon /> : <PxIcon name="gamepad" />;
 };
 
 // Filter chips with counts; hidden when there is only one option to choose from
@@ -86,7 +86,7 @@ const Work = () => {
 
         {projects.length === 0 ? (
           <div className="work-empty reveal">
-            <span className="work-empty__icon" aria-hidden="true"><HiOutlineCube /></span>
+            <span className="work-empty__icon" aria-hidden="true"><PxIcon name="gamepad" /></span>
             <h3>New levels loading…</h3>
             <p>I&apos;m putting together my latest Roblox work. Check back soon.</p>
             <span className="work-empty__bar" aria-hidden="true"><i /></span>
@@ -118,7 +118,7 @@ const Work = () => {
                       <span className="proj__level">LV {String(index + 1).padStart(2, "0")}</span>
                       {project.confidential ? (
                         <span className="proj__status proj__status--locked">
-                          <HiOutlineLockClosed aria-hidden="true" /> Confidential
+                          <PxIcon name="lock" /> Confidential
                         </span>
                       ) : (
                         project.status && <span className="proj__status">{project.status}</span>
@@ -135,7 +135,7 @@ const Work = () => {
                       <p>{project.hook}</p>
                       <div className="proj__foot">
                         <span>{[project.engine, project.genre].filter(Boolean).join(" · ")}</span>
-                        <b aria-hidden="true">View project ↗</b>
+                        <b aria-hidden="true">View project <PxIcon name="arrowUpRight" /></b>
                       </div>
                     </div>
                   </article>

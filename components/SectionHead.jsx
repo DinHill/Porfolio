@@ -1,3 +1,4 @@
+// Section title with a "STAGE 01"-style eyebrow tag
 const SectionHead = ({ num, eyebrow, title, muted, children }) => {
   return (
     <div className="sec-head">

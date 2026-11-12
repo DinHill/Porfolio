@@ -1,4 +1,5 @@
 import { marquee } from "@/data/portfolio";
+import { PxIcon } from "./Pixel";
 
 const Marquee = () => {
   // Rendered twice so the loop scrolls seamlessly
@@ -9,7 +10,7 @@ const Marquee = () => {
         {items.map((item, i) => (
           <span key={i}>
             {item}
-            <i />
+            <PxIcon name="star" />
           </span>
         ))}
       </div>

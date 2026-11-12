@@ -1,7 +1,8 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import BlockAvatar from "./BlockAvatar";
+import PixelScene from "./PixelScene";
+import { Avatar } from "./Pixel";
 import { experience, profile, skillGroups } from "@/data/portfolio";
 
 // Explorer tree — rows with an href jump to that section of the page
@@ -62,9 +63,9 @@ const StudioWindow = () => {
     <div className="studio">
       <div className="studio__glow" aria-hidden="true" />
       <div className="studio__bar">
-        <span className="dots" aria-hidden="true"><i /><i /><i /></span>
         <span className="studio__file">{profile.shortName.replace(" ", "")}.rbxl</span>
         <span className="studio__badge">Studio</span>
+        <span className="studio__btns" aria-hidden="true"><i /><i /><i /></span>
       </div>
 
       <div className="studio__body">
@@ -98,16 +99,12 @@ const StudioWindow = () => {
             <span className="viewport__fps">60 fps</span>
           </div>
           <div className="viewport__scene">
-            <div className="scene__sky" />
-            <div className="scene__sun" />
-            <div className="scene__ridge scene__ridge--back" />
-            <div className="scene__ridge scene__ridge--front" />
-            <div className="scene__floor" />
+            <PixelScene />
 
             <div className="mini">
               <div className="mini__vitals">
                 <div className="mini__avatar">
-                  <BlockAvatar />
+                  <Avatar />
                 </div>
                 <div className="mini__bars">
                   <div className="mini__name">

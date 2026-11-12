@@ -1,28 +1,38 @@
 import Image from "next/image";
-import { HiOutlineCake, HiOutlineLocationMarker, HiOutlineMail, HiOutlinePhone, HiOutlineTranslate } from "react-icons/hi";
-import { MdFileDownload } from "react-icons/md";
 import { FaLinkedin } from "react-icons/fa";
 import { profile, socials } from "@/data/portfolio";
-import Blob from "./Blob";
+import { Avatar, PxIcon } from "./Pixel";
+import CharBackdrop from "./CharBackdrop";
 
 const About = () => {
   const linkedin = socials.find((social) => social.name === "LinkedIn");
   const info = [
-    { icon: <HiOutlineMail />, label: "Email", value: profile.email, href: `mailto:${profile.email}` },
-    { icon: <HiOutlinePhone />, label: "Phone", value: profile.phone, href: `tel:${profile.phone.replace(/\s/g, "")}` },
-    { icon: <HiOutlineLocationMarker />, label: "Location", value: profile.location },
-    { icon: <HiOutlineCake />, label: "Birthday", value: profile.birthday },
-    ...(profile.certificates ?? []).map((cert) => ({ icon: <HiOutlineTranslate />, label: cert.name, value: cert.value })),
+    { icon: "mail", label: "Email", value: profile.email, href: `mailto:${profile.email}` },
+    { icon: "phone", label: "Phone", value: profile.phone, href: `tel:${profile.phone.replace(/\s/g, "")}` },
+    { icon: "pin", label: "Location", value: profile.location },
+    { icon: "star", label: "Birthday", value: profile.birthday },
+    ...(profile.certificates ?? []).map((cert) => ({ icon: "chat", label: cert.name, value: cert.value })),
   ];
 
   return (
     <section className="section section--alt" id="about" aria-label="About me">
       <div className="wrap about">
         <div className="about__visual reveal">
-          <div className="avatar">
-            <Blob className="avatar__blob" />
-            <Image className="avatar__img" src={profile.avatar} alt={profile.name} width={440} height={658} sizes="360px" />
-          </div>
+          {/* "Character select" card: photo on a pixel backdrop with a name plate */}
+          <figure className="charcard">
+            <div className="charcard__stage">
+              <CharBackdrop />
+              <Image className="charcard__img" src={profile.avatar} alt={profile.name} width={440} height={658} sizes="320px" />
+            </div>
+            <figcaption className="charcard__plate">
+              <span className="charcard__face"><Avatar /></span>
+              <span>
+                <b>{profile.name}</b>
+                <em>Class · {profile.tagline}</em>
+              </span>
+              <span className="charcard__p1">P1</span>
+            </figcaption>
+          </figure>
         </div>
 
         <div className="about__copy">
@@ -52,7 +62,7 @@ const About = () => {
           <ul className="about__info reveal" style={{ "--d": ".18s" }}>
             {info.map((item) => (
               <li key={item.label}>
-                <span className="about__icon" aria-hidden="true">{item.icon}</span>
+                <span className="about__icon" aria-hidden="true"><PxIcon name={item.icon} /></span>
                 <div>
                   <small>{item.label}</small>
                   {item.href ? <a href={item.href}>{item.value}</a> : <b>{item.value}</b>}
@@ -64,7 +74,7 @@ const About = () => {
           <div className="about__cta reveal" style={{ "--d": ".22s" }}>
             <a className="btn btn--primary" href="#contact">Get in touch</a>
             <a className="btn btn--ghost" href={profile.cv} download={profile.cvFileName}>
-              <MdFileDownload aria-hidden="true" />
+              <PxIcon name="download" />
               <span>Download CV</span>
             </a>
             {linkedin && (

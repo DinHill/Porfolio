@@ -2,23 +2,15 @@
 
 import { useEffect, useRef } from "react";
 
-// Site-wide scroll effects: progress bar, reveal-on-scroll and the cursor spotlight.
+// Site-wide scroll effects: the segmented "loading bar" scroll progress and reveal-on-scroll.
 const Effects = () => {
   const barRef = useRef(null);
-  const spotRef = useRef(null);
 
   useEffect(() => {
     const onScroll = () => {
       const max = document.documentElement.scrollHeight - window.innerHeight;
       const progress = max > 0 ? window.scrollY / max : 0;
       if (barRef.current) barRef.current.style.transform = `scaleX(${progress})`;
-    };
-
-    const onMove = (e) => {
-      if (spotRef.current) {
-        spotRef.current.style.setProperty("--x", `${e.clientX}px`);
-        spotRef.current.style.setProperty("--y", `${e.clientY}px`);
-      }
     };
 
     const observer = new IntersectionObserver(
@@ -36,21 +28,16 @@ const Effects = () => {
 
     onScroll();
     window.addEventListener("scroll", onScroll, { passive: true });
-    window.addEventListener("pointermove", onMove, { passive: true });
     return () => {
       observer.disconnect();
       window.removeEventListener("scroll", onScroll);
-      window.removeEventListener("pointermove", onMove);
     };
   }, []);
 
   return (
-    <>
-      <div className="progress" aria-hidden="true">
-        <span ref={barRef} className="progress__bar" />
-      </div>
-      <div ref={spotRef} className="spotlight" aria-hidden="true" />
-    </>
+    <div className="progress" aria-hidden="true">
+      <span ref={barRef} className="progress__bar" />
+    </div>
   );
 };
 

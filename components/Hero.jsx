@@ -2,10 +2,9 @@
 
 import { useEffect, useState } from "react";
 import { TypeAnimation } from "react-type-animation";
-import { MdArrowOutward } from "react-icons/md";
-import { HiOutlineLocationMarker } from "react-icons/hi";
 import { experience, profile, projects } from "@/data/portfolio";
 import StudioWindow from "./StudioWindow";
+import { PxIcon } from "./Pixel";
 
 // Whole months between an "MM/YYYY" string and today
 const monthsSince = (mmYYYY) => {
@@ -23,21 +22,25 @@ const Hero = () => {
   useEffect(() => setMonths(monthsSince(firstRole.start)), [firstRole.start]);
 
   const stats = [
-    { label: "Months on live games", value: months ?? "–" },
+    { label: "Months on live games", value: months ?? "–", icon: "heart" },
     // Only shown once real projects have been added
-    ...(projects.length ? [{ label: "Games worked on", value: projects.length }] : []),
+    ...(projects.length ? [{ label: "Games worked on", value: projects.length, icon: "star" }] : []),
   ];
 
   return (
     <section className="hero" id="top" aria-label="Introduction">
       <div className="hero__bg" aria-hidden="true">
         <div className="hero__grid" />
-        <div className="blob blob--a" />
-        <div className="blob blob--b" />
+        <div className="hero__stars" />
       </div>
 
       <div className="wrap hero__inner">
         <div className="hero__copy">
+          <p className="hero__eyebrow reveal">
+            <span className="hero__blink" aria-hidden="true" />
+            Player 1 · Ready
+          </p>
+
           <h1 className="hero__title reveal" style={{ "--d": ".06s" }}>
             <span className="hero__hello">Hi, I&apos;m {profile.shortName}.</span>
             <span className="hero__role">
@@ -45,28 +48,29 @@ const Hero = () => {
                 sequence={profile.roles.flatMap((role) => [role, 2200])}
                 wrapper="span"
                 speed={45}
-                className="grad"
+                className="hero__typed"
                 repeat={Infinity}
                 cursor={false}
               />
+              <span className="hero__caret" aria-hidden="true" />
             </span>
           </h1>
 
           <p className="hero__lede reveal" style={{ "--d": ".12s" }}>{profile.intro}</p>
 
           <ul className="hero__facts reveal" style={{ "--d": ".15s" }}>
-            <li><HiOutlineLocationMarker aria-hidden="true" /> Based in {profile.location}</li>
+            <li><PxIcon name="pin" /> Based in {profile.location}</li>
             <li><span className="hero__live" aria-hidden="true" /> Building live games</li>
           </ul>
 
           <div className="hero__cta reveal" style={{ "--d": ".18s" }}>
             <a className="btn btn--primary" href="#work">
+              <PxIcon name="play" />
               <span>View my work</span>
-              <MdArrowOutward aria-hidden="true" />
             </a>
             <a className="btn btn--ghost" href={profile.cv} target="_blank" rel="noopener noreferrer">
               <span>View résumé</span>
-              <MdArrowOutward aria-hidden="true" />
+              <PxIcon name="arrowUpRight" />
             </a>
           </div>
 
@@ -81,7 +85,10 @@ const Hero = () => {
             {stats.map((stat) => (
               <div className="stats__item" key={stat.label}>
                 <dt>{stat.label}</dt>
-                <dd>{stat.value}</dd>
+                <dd>
+                  <PxIcon name={stat.icon} />
+                  {stat.value}
+                </dd>
               </div>
             ))}
           </dl>

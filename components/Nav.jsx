@@ -1,10 +1,9 @@
 "use client";
 
 import { useEffect, useState } from "react";
-import { HiOutlineMenuAlt3, HiX } from "react-icons/hi";
-import { MdFileDownload } from "react-icons/md";
 import { navLinks, profile } from "@/data/portfolio";
 import ThemeToggle from "./ThemeToggle";
+import { Avatar, PxIcon } from "./Pixel";
 
 const Nav = () => {
   const [open, setOpen] = useState(false);
@@ -47,8 +46,11 @@ const Nav = () => {
     <header className={`nav ${scrolled ? "is-scrolled" : ""}`}>
       <div className="wrap nav__inner">
         <a className="brand" href="#top" aria-label={`${profile.shortName} — home`}>
-          <span className="brand__sign">{profile.shortName}</span>
-          <em>{profile.tagline}</em>
+          <span className="brand__face"><Avatar /></span>
+          <span className="brand__text">
+            <span className="brand__sign">{profile.shortName}</span>
+            <em>{profile.tagline}</em>
+          </span>
         </a>
 
         <nav className="nav__links" aria-label="Primary">
@@ -58,6 +60,8 @@ const Nav = () => {
               href={link.href}
               className={`nav__link ${active === link.href ? "is-active" : ""}`}
             >
+              {/* RPG menu cursor, shown on the active and hovered item */}
+              <PxIcon name="play" className="nav__cursor" />
               {link.name}
             </a>
           ))}
@@ -66,7 +70,7 @@ const Nav = () => {
         <div className="nav__actions">
           <ThemeToggle />
           <a className="btn btn--ghost btn--sm nav__cv" href={profile.cv} download={profile.cvFileName}>
-            <MdFileDownload aria-hidden="true" />
+            <PxIcon name="download" />
             <span>CV</span>
           </a>
           <a className="btn btn--primary btn--sm" href="#contact">Contact</a>
@@ -77,7 +81,7 @@ const Nav = () => {
             aria-controls="navDrawer"
             onClick={() => setOpen(!open)}
           >
-            {open ? <HiX /> : <HiOutlineMenuAlt3 />}
+            <PxIcon name={open ? "close" : "menu"} />
           </button>
         </div>
       </div>
@@ -88,10 +92,12 @@ const Nav = () => {
           <div className="drawer" id="navDrawer">
             {navLinks.map((link) => (
               <a key={link.href} href={link.href} onClick={() => setOpen(false)}>
+                <PxIcon name="play" className="nav__cursor" />
                 {link.name}
               </a>
             ))}
             <a href={profile.cv} download={profile.cvFileName} onClick={() => setOpen(false)}>
+              <PxIcon name="play" className="nav__cursor" />
               Download CV
             </a>
             <a href="#contact" className="drawer__cta" onClick={() => setOpen(false)}>

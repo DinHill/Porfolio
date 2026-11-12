@@ -4,9 +4,10 @@ export const metadata = { title: "404 · Page not found" };
 export default function NotFound() {
   return (
     <main className="lost">
+      <p className="lost__tag">Game over</p>
       <p className="lost__code">404</p>
       <h1>This level doesn&apos;t exist.</h1>
-      <p className="lost__text">The page you&apos;re looking for isn&apos;t here.</p>
+      <p className="lost__text">The page you&apos;re looking for isn&apos;t here. Continue?</p>
       <a className="btn btn--primary" href="/">Back to the portfolio</a>
     </main>
   );

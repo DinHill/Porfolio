@@ -1,10 +1,10 @@
 import Image from "next/image";
-import { MdArrowOutward } from "react-icons/md";
 import { education, experience } from "@/data/portfolio";
 import { engineIcon } from "@/lib/engineIcons";
 import { projectAnchor } from "@/lib/slug";
 import SectionHead from "./SectionHead";
 import ConfidentialNote from "./ConfidentialNote";
+import { PxIcon } from "./Pixel";
 
 // Square badge: an image logo, an engine mark, or the first letters of the name
 const LogoBadge = ({ logo, logoIcon, logoTone, fallback }) => {
@@ -40,7 +40,7 @@ const Role = ({ role }) => (
       <div className="xp__projects">
         <span>Selected work</span>
         {role.projects.map((title) => (
-          <a key={title} href={`#${projectAnchor(title)}`}>{title} <MdArrowOutward aria-hidden="true" /></a>
+          <a key={title} href={`#${projectAnchor(title)}`}>{title} <PxIcon name="arrowUpRight" /></a>
         ))}
       </div>
     )}

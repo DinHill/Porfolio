@@ -2,10 +2,9 @@
 
 import { useState } from "react";
 import emailjs from "emailjs-com";
-import { HiOutlineArrowLongRight } from "react-icons/hi2";
-import { MdArrowOutward } from "react-icons/md";
 import { profile, socials } from "@/data/portfolio";
 import { trackAction } from "@/lib/analytics/client";
+import { PxIcon } from "./Pixel";
 
 const Contact = () => {
   const [status, setStatus] = useState("idle"); // idle | sending | sent | error
@@ -50,7 +49,7 @@ const Contact = () => {
               <span className="eyebrow"><i /><b>05</b> Let&apos;s talk</span>
               <h2 className="contact__title">
                 Ready for<br />
-                <span className="grad">player two?</span>
+                <span className="hl">player two?</span>
               </h2>
               <p className="contact__sub">
                 I&apos;m always open to discussing new projects, creative ideas or opportunities to be part of
@@ -72,7 +71,7 @@ const Contact = () => {
               <nav className="contact__socials" aria-label="Social profiles">
                 {socials.map((social) => (
                   <a key={social.name} href={social.href} target="_blank" rel="noopener noreferrer">
-                    {social.name} <MdArrowOutward aria-hidden="true" />
+                    {social.name} <PxIcon name="arrowUpRight" />
                   </a>
                 ))}
               </nav>
@@ -99,7 +98,7 @@ const Contact = () => {
               </label>
               <button className="btn btn--primary btn--lg" disabled={status === "sending"}>
                 <span>{status === "sending" ? "Sending..." : "Send message"}</span>
-                <HiOutlineArrowLongRight aria-hidden="true" />
+                <PxIcon name="arrowRight" />
               </button>
               <p className={`form__status form__status--${status}`} role="status">
                 {status === "sent" && "Message sent — thanks! I'll get back to you soon."}

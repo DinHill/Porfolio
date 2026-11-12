@@ -1,12 +1,14 @@
-import { Inter, Sora, JetBrains_Mono, Dancing_Script } from "next/font/google";
+import { Inter, Jersey_15, Silkscreen, JetBrains_Mono } from "next/font/google";
 import "./globals.css";
 import { themeScript } from "@/lib/theme";
 import { profile } from "@/data/portfolio";
 
+// Jersey 15 for headings, Silkscreen for small pixel labels, Inter for reading text, JetBrains Mono for code-ish details.
+// (Pixelify Sans was tried for headings, but its B, C and 5 read as G, O and S.)
 const inter = Inter({ variable: "--font-inter", subsets: ["latin"] });
-const sora = Sora({ variable: "--font-sora", subsets: ["latin"], weight: ["500", "600", "700", "800"] });
+const pixel = Jersey_15({ variable: "--font-pixel", subsets: ["latin"], weight: "400" });
+const label = Silkscreen({ variable: "--font-label", subsets: ["latin"], weight: ["400", "700"] });
 const mono = JetBrains_Mono({ variable: "--font-mono", subsets: ["latin"] });
-const script = Dancing_Script({ variable: "--font-script", subsets: ["latin"], weight: ["700"] });
 
 export const metadata = {
   title: profile.tabTitle,
@@ -16,20 +18,21 @@ export const metadata = {
 export const viewport = {
   colorScheme: "dark light",
   themeColor: [
-    { media: "(prefers-color-scheme: light)", color: "#f6f6fa" },
-    { media: "(prefers-color-scheme: dark)", color: "#07080d" },
+    { media: "(prefers-color-scheme: light)", color: "#f3eddc" },
+    { media: "(prefers-color-scheme: dark)", color: "#0e0c1d" },
   ],
 };
 
 // Shared by the portfolio (app/(site)) and the private dashboard (app/hq).
 // data-theme is set by themeScript before paint, hence suppressHydrationWarning on <html>.
+// The font variables go on <html> because the theme tokens on :root (globals.css) refer to them.
 export default function RootLayout({ children }) {
   return (
-    <html lang="en" suppressHydrationWarning>
+    <html lang="en" className={`${inter.variable} ${pixel.variable} ${label.variable} ${mono.variable}`} suppressHydrationWarning>
       <head>
         <script dangerouslySetInnerHTML={{ __html: themeScript }} />
       </head>
-      <body className={`${inter.variable} ${sora.variable} ${mono.variable} ${script.variable} antialiased`}>
+      <body className="antialiased">
         {children}
       </body>
     </html>
